@@ -89,8 +89,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBDb73UZ6nKpz3gGuTtZ0nfjUMg7CI7VJ8" />
-
-        <!-- ADMOB TEST APP ID -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />

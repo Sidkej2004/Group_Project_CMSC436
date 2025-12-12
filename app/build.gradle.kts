@@ -1,6 +1,5 @@
-import androidx.room.vo.Properties
-
-val org.gradle.api.plugins.JavaPluginExtension.util: kotlin.Any
+import java.util.Properties
+import java.io.FileInputStream
 
 plugins {
     alias(libs.plugins.android.application)
@@ -21,15 +20,15 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val properties = java.util.Properties()
+        // Load API keys from local.properties
+        val properties = Properties()
         val localPropertiesFile = rootProject.file("local.properties")
         if (localPropertiesFile.exists()) {
-            properties.load(localPropertiesFile.inputStream())
+            properties.load(FileInputStream(localPropertiesFile))
         }
 
         manifestPlaceholders["MAPS_API_KEY"] = properties.getProperty("MAPS_API_KEY", "")
         manifestPlaceholders["ADMOB_APP_ID"] = properties.getProperty("ADMOB_APP_ID", "")
-
     }
 
     buildTypes {
@@ -52,18 +51,15 @@ android {
     buildFeatures {
         viewBinding = true
     }
-
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.database)
-    implementation(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -72,14 +68,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
 
     implementation("com.google.android.gms:play-services-maps:18.2.0")
-
     implementation("com.google.android.gms:play-services-location:21.0.1")
-
     implementation("com.google.android.material:material:1.12.0")
-
     implementation("androidx.recyclerview:recyclerview:1.3.2")
-
     implementation("com.google.android.gms:play-services-ads:23.3.0")
-
-
 }
