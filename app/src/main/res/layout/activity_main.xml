@@ -40,6 +40,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/waterProgress"/>
 
+    <!-- fountain count from Firebase -->
+    <TextView
+        android:id="@+id/fountainCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Community fountains: 0"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressLabel"/>
+
     <!-- button to add 250ml -->
     <Button
         android:id="@+id/add250Btn"
@@ -49,7 +60,7 @@
         android:text="Add 250 ml"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progressLabel"/>
+        app:layout_constraintTop_toBottomOf="@id/fountainCountText"/>
 
     <!-- map button -->
     <Button
@@ -79,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:adUnitId="ca-app-pub-3940256099942544~3347511713"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
