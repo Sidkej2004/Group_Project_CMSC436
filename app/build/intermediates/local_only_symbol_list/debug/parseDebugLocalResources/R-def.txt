@@ -7,6 +7,7 @@ drawable ic_launcher_background
 drawable ic_launcher_foreground
 id adView
 id add250Btn
+id addCustomBtn
 id backToHomeBtn
 id fountainCountText
 id map_fragment

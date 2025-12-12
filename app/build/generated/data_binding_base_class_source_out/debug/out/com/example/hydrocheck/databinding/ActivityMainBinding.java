@@ -29,6 +29,9 @@ public final class ActivityMainBinding implements ViewBinding {
   public final Button add250Btn;
 
   @NonNull
+  public final Button addCustomBtn;
+
+  @NonNull
   public final TextView fountainCountText;
 
   @NonNull
@@ -47,12 +50,13 @@ public final class ActivityMainBinding implements ViewBinding {
   public final ProgressBar waterProgress;
 
   private ActivityMainBinding(@NonNull ConstraintLayout rootView, @NonNull AdView adView,
-      @NonNull Button add250Btn, @NonNull TextView fountainCountText, @NonNull Button openMapBtn,
-      @NonNull Button openSettingsBtn, @NonNull TextView progressLabel, @NonNull TextView titleText,
-      @NonNull ProgressBar waterProgress) {
+      @NonNull Button add250Btn, @NonNull Button addCustomBtn, @NonNull TextView fountainCountText,
+      @NonNull Button openMapBtn, @NonNull Button openSettingsBtn, @NonNull TextView progressLabel,
+      @NonNull TextView titleText, @NonNull ProgressBar waterProgress) {
     this.rootView = rootView;
     this.adView = adView;
     this.add250Btn = add250Btn;
+    this.addCustomBtn = addCustomBtn;
     this.fountainCountText = fountainCountText;
     this.openMapBtn = openMapBtn;
     this.openSettingsBtn = openSettingsBtn;
@@ -100,6 +104,12 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.addCustomBtn;
+      Button addCustomBtn = ViewBindings.findChildViewById(rootView, id);
+      if (addCustomBtn == null) {
+        break missingId;
+      }
+
       id = R.id.fountainCountText;
       TextView fountainCountText = ViewBindings.findChildViewById(rootView, id);
       if (fountainCountText == null) {
@@ -136,7 +146,7 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityMainBinding((ConstraintLayout) rootView, adView, add250Btn,
+      return new ActivityMainBinding((ConstraintLayout) rootView, adView, add250Btn, addCustomBtn,
           fountainCountText, openMapBtn, openSettingsBtn, progressLabel, titleText, waterProgress);
     }
     String missingId = rootView.getResources().getResourceName(id);

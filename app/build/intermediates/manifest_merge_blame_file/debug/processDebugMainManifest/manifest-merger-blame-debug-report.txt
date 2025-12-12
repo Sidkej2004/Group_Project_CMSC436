@@ -152,15 +152,17 @@
 87
 88        <!-- GOOGLE MAPS API KEY -->
 89        <meta-data
+89-->/Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:40:9-43:45
 90            android:name="com.google.android.geo.API_KEY"
 90-->/Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:41:13-58
 91            android:value="AIzaSyBDb73UZ6nKpz3gGuTtZ0nfjUMg7CI7VJ8" />
-91-->/Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:42:13-44
+91-->/Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:42:13-68
 92        <meta-data
+92-->/Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:45:9-48:45
 93            android:name="com.google.android.gms.ads.APPLICATION_ID"
 93-->/Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:46:13-69
 94            android:value="ca-app-pub-3940256099942544~3347511713" />
-94-->/Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:47:13-44
+94-->/Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:47:13-67
 95
 96        <!-- Needs to be explicitly declared on P+ -->
 97        <uses-library

@@ -1,22 +1,4 @@
 -- Merging decision tree log ---
-meta-data#com.google.android.geo.API_KEY
-INJECTED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:40:9-43:45
-	tools:replace
-		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:43:13-42
-	android:value
-		INJECTED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml
-		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:42:13-44
-	android:name
-		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:41:13-58
-meta-data#com.google.android.gms.ads.APPLICATION_ID
-INJECTED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:45:9-48:45
-	tools:replace
-		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:48:13-42
-	android:value
-		INJECTED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml
-		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:47:13-44
-	android:name
-		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:46:13-69
 manifest
 ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:2:1-52:12
 INJECTED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:2:1-52:12
@@ -263,6 +245,22 @@ ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/m
 		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:37:13-55
 	android:name
 		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:36:13-40
+meta-data#com.google.android.geo.API_KEY
+ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:40:9-43:45
+	tools:replace
+		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:43:13-42
+	android:value
+		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:42:13-68
+	android:name
+		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:41:13-58
+meta-data#com.google.android.gms.ads.APPLICATION_ID
+ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:45:9-48:45
+	tools:replace
+		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:48:13-42
+	android:value
+		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:47:13-67
+	android:name
+		ADDED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml:46:13-69
 uses-sdk
 INJECTED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/siddhant_kejriwal/AndroidStudioProjects/GroupProject/app/src/main/AndroidManifest.xml
