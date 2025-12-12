@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
 }
-
 android {
     namespace = "com.example.hydrocheck"
     compileSdk = 36
