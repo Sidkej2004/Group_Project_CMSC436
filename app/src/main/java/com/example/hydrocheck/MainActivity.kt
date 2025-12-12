@@ -2,7 +2,9 @@ package com.example.hydrocheck
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.hydrocheck.databinding.ActivityMainBinding
@@ -41,6 +43,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.addCustomBtn.setOnClickListener {
+            showCustomAmountDialog()
+        }
+
         binding.openMapBtn.setOnClickListener {
             val i = Intent(this, MapActivity::class.java)
             startActivity(i)
@@ -59,6 +65,38 @@ class MainActivity : AppCompatActivity() {
         }
 
         updateFountainCount()
+    }
+
+    private fun showCustomAmountDialog() {
+        val input = EditText(this)
+        input.hint = "Enter ml"
+        input.inputType = android.text.InputType.TYPE_CLASS_NUMBER
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Add Water")
+            .setMessage("How much water did you drink?")
+            .setView(input)
+            .setPositiveButton("Add") { _, _ ->
+                val text = input.text.toString()
+                val amount = text.toIntOrNull()
+
+                if (amount == null) {
+                    Toast.makeText(this, "Please enter a valid number", Toast.LENGTH_SHORT).show()
+                } else if (amount <= 0) {
+                    Toast.makeText(this, "Amount must be greater than 0", Toast.LENGTH_SHORT).show()
+                } else {
+                    HydroController.addWater(this, amount)
+                    updateUI()
+
+                    if (HydroController.getCurrentWater() >= HydroController.getMaxWater()) {
+                        Toast.makeText(this, "Goal reached! 🎉", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.show()
     }
 
     override fun onResume() {
