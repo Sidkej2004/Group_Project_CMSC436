@@ -2,77 +2,96 @@ package com.example.hydrocheck
 
 import android.content.Context
 
+// helper object for shared preferences
 object Prefs {
 
-    private const val FILE = "hydro_prefs"
+    private const val PREFS_NAME = "hydro_prefs"
+    private const val DARK_MODE_KEY = "dark_mode"
+    private const val MAX_WATER_KEY = "max_water"
+    private const val CURRENT_WATER_KEY = "current_water"
 
-    private const val KEY_DARK_MODE = "dark_mode"
-    private const val KEY_MAX_WATER = "max_water"
-    private const val KEY_CURRENT_WATER = "current_water"
+    // get shared preferences
+    private fun getPrefs(ctx: Context) = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    private const val DEFAULT_MAX = 2000
-
-    private fun sp(ctx: Context) = ctx.getSharedPreferences(FILE, Context.MODE_PRIVATE)
-
+    // dark mode functions
     fun isDark(ctx: Context): Boolean {
-        val prefs = sp(ctx)
-
+        val prefs = getPrefs(ctx)
         return try {
-            prefs.getBoolean(KEY_DARK_MODE, false)
+            prefs.getBoolean(DARK_MODE_KEY, false)
         } catch (e: ClassCastException) {
-            val raw = prefs.getString(KEY_DARK_MODE, "false") ?: "false"
-            val migrated = when (raw.lowercase()) {
+            // fix if it was saved as string
+            val stringValue = prefs.getString(DARK_MODE_KEY, "false") ?: "false"
+            val boolValue = when (stringValue.lowercase()) {
                 "true", "dark", "1", "yes" -> true
                 else -> false
             }
-            prefs.edit().remove(KEY_DARK_MODE).putBoolean(KEY_DARK_MODE, migrated).apply()
-            migrated
+            prefs.edit().remove(DARK_MODE_KEY).putBoolean(DARK_MODE_KEY, boolValue).apply()
+            boolValue
         }
     }
 
-    fun setDark(ctx: Context, dark: Boolean) {
-        sp(ctx).edit().putBoolean(KEY_DARK_MODE, dark).apply()
+    fun setDark(ctx: Context, isDark: Boolean) {
+        getPrefs(ctx).edit().putBoolean(DARK_MODE_KEY, isDark).apply()
     }
 
+    // max water goal functions
     fun getMaxWater(ctx: Context): Int {
-        val prefs = sp(ctx)
+        val prefs = getPrefs(ctx)
         return try {
-            val v = prefs.getInt(KEY_MAX_WATER, DEFAULT_MAX)
-            if (v <= 0) DEFAULT_MAX else v
+            val value = prefs.getInt(MAX_WATER_KEY, 2000)
+            if (value <= 0) 2000 else value
         } catch (e: ClassCastException) {
-            // If it was ever stored as String, migrate
-            val raw = prefs.getString(KEY_MAX_WATER, DEFAULT_MAX.toString()) ?: DEFAULT_MAX.toString()
-            val migrated = raw.toIntOrNull() ?: DEFAULT_MAX
-            prefs.edit().remove(KEY_MAX_WATER).putInt(KEY_MAX_WATER, migrated).apply()
-            migrated
+            // migrate from string if needed
+            val stringValue = prefs.getString(MAX_WATER_KEY, "2000") ?: "2000"
+            val intValue = stringValue.toIntOrNull() ?: 2000
+            prefs.edit().remove(MAX_WATER_KEY).putInt(MAX_WATER_KEY, intValue).apply()
+            intValue
         }
     }
 
     fun setMaxWater(ctx: Context, value: Int) {
-        val v = value.coerceIn(500, 4000)
-        sp(ctx).edit().putInt(KEY_MAX_WATER, v).apply()
+        // keep between 500 and 4000
+        var safeValue = value
+        if (safeValue < 500) safeValue = 500
+        if (safeValue > 4000) safeValue = 4000
 
-        val cur = getCurrentWater(ctx)
-        if (cur > v) setCurrentWater(ctx, v)
+        getPrefs(ctx).edit().putInt(MAX_WATER_KEY, safeValue).apply()
+
+        // make sure current water doesn't exceed max
+        val currentWater = getCurrentWater(ctx)
+        if (currentWater > safeValue) {
+            setCurrentWater(ctx, safeValue)
+        }
     }
 
+    // current water functions
     fun getCurrentWater(ctx: Context): Int {
-        val max = getMaxWater(ctx)
-        val prefs = sp(ctx)
-        val v = try {
-            prefs.getInt(KEY_CURRENT_WATER, 0)
+        val maxWater = getMaxWater(ctx)
+        val prefs = getPrefs(ctx)
+        val value = try {
+            prefs.getInt(CURRENT_WATER_KEY, 0)
         } catch (e: ClassCastException) {
-            val raw = prefs.getString(KEY_CURRENT_WATER, "0") ?: "0"
-            val migrated = raw.toIntOrNull() ?: 0
-            prefs.edit().remove(KEY_CURRENT_WATER).putInt(KEY_CURRENT_WATER, migrated).apply()
-            migrated
+            // fix string values
+            val stringValue = prefs.getString(CURRENT_WATER_KEY, "0") ?: "0"
+            val intValue = stringValue.toIntOrNull() ?: 0
+            prefs.edit().remove(CURRENT_WATER_KEY).putInt(CURRENT_WATER_KEY, intValue).apply()
+            intValue
         }
-        return v.coerceIn(0, max)
+
+        // make sure it's not negative or over max
+        if (value < 0) return 0
+        if (value > maxWater) return maxWater
+        return value
     }
 
     fun setCurrentWater(ctx: Context, value: Int) {
-        val max = getMaxWater(ctx)
-        val v = value.coerceIn(0, max)
-        sp(ctx).edit().putInt(KEY_CURRENT_WATER, v).apply()
+        val maxWater = getMaxWater(ctx)
+        var safeValue = value
+
+        // keep between 0 and max
+        if (safeValue < 0) safeValue = 0
+        if (safeValue > maxWater) safeValue = maxWater
+
+        getPrefs(ctx).edit().putInt(CURRENT_WATER_KEY, safeValue).apply()
     }
 }

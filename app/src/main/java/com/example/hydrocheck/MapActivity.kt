@@ -14,40 +14,44 @@ import com.google.android.gms.maps.model.MarkerOptions
 class MapActivity : AppCompatActivity() {
 
     private lateinit var map: GoogleMap
-
-    companion object {
-        private const val REQ_FINE_LOCATION = 1001
-    }
+    private val LOCATION_PERMISSION_CODE = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
+        // get the map fragment
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
 
-        mapFragment.getMapAsync { gMap ->
-            map = gMap
+        // when map is ready
+        mapFragment.getMapAsync { googleMap ->
+            map = googleMap
 
-            // UI controls
+            // enable controls
             map.uiSettings.isMyLocationButtonEnabled = true
             map.uiSettings.isZoomControlsEnabled = true
 
-            enableMyLocation()
-            map.setOnMapLongClickListener { latLng ->
-                map.addMarker(
-                    MarkerOptions()
-                        .position(latLng)
-                        .title("Water Fountain")
-                        .snippet("User added")
-                )
+            // try to show user location
+            checkLocationPermission()
+
+            // long press to add fountain
+            map.setOnMapLongClickListener { location ->
+                val marker = MarkerOptions()
+                marker.position(location)
+                marker.title("Water Fountain")
+                marker.snippet("User added")
+                map.addMarker(marker)
             }
-            val fallback = LatLng(38.9869, -76.9426)
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(fallback, 15f))
+
+            // default location (college park)
+            val defaultLocation = LatLng(38.9869, -76.9426)
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 15f))
         }
     }
 
-    private fun enableMyLocation() {
+    private fun checkLocationPermission() {
+        // check if we have permission
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -55,10 +59,11 @@ class MapActivity : AppCompatActivity() {
         ) {
             map.isMyLocationEnabled = true
         } else {
+            // ask for permission
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQ_FINE_LOCATION
+                LOCATION_PERMISSION_CODE
             )
         }
     }
@@ -70,11 +75,11 @@ class MapActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == REQ_FINE_LOCATION &&
-            grantResults.isNotEmpty() &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) {
-            enableMyLocation()
+        // check if user granted permission
+        if (requestCode == LOCATION_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkLocationPermission()
+            }
         }
     }
 }

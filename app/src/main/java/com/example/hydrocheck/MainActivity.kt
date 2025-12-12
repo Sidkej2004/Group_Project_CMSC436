@@ -13,48 +13,58 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(
-            if (Prefs.isDark(this)) AppCompatDelegate.MODE_NIGHT_YES
-            else AppCompatDelegate.MODE_NIGHT_NO
-        )
+        // check if dark mode is on
+        if (Prefs.isDark(this)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
 
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Ads
+        // setup ads - using test id from google docs
         MobileAds.initialize(this)
-        binding.adView.loadAd(AdRequest.Builder().build())
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
 
-        // Init progress UI
-        refreshWaterUI()
+        // show current water level
+        updateUI()
 
+        // button to add water
         binding.add250Btn.setOnClickListener {
-            val cur = Prefs.getCurrentWater(this)
-            Prefs.setCurrentWater(this, cur + 250)
-            refreshWaterUI()
+            var currentWater = Prefs.getCurrentWater(this)
+            currentWater = currentWater + 250
+            Prefs.setCurrentWater(this, currentWater)
+            updateUI()
         }
 
+        // open map button
         binding.openMapBtn.setOnClickListener {
-            startActivity(Intent(this, MapActivity::class.java))
+            val intent = Intent(this, MapActivity::class.java)
+            startActivity(intent)
         }
 
+        // settings button
         binding.openSettingsBtn.setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
+            val settingsIntent = Intent(this, SettingsActivity::class.java)
+            startActivity(settingsIntent)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        refreshWaterUI()
+        updateUI() // refresh when coming back
     }
 
-    private fun refreshWaterUI() {
-        val max = Prefs.getMaxWater(this)
-        val cur = Prefs.getCurrentWater(this)
+    // update the progress bar and text
+    private fun updateUI() {
+        val maxWater = Prefs.getMaxWater(this)
+        val currentWater = Prefs.getCurrentWater(this)
 
-        binding.waterProgress.max = max
-        binding.waterProgress.progress = cur
-        binding.progressLabel.text = "$cur / $max ml"
+        binding.waterProgress.max = maxWater
+        binding.waterProgress.progress = currentWater
+        binding.progressLabel.text = "$currentWater / $maxWater ml"
     }
 }
