@@ -18,35 +18,34 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 class MapActivity : AppCompatActivity() {
 
-    private lateinit var map: GoogleMap
-    private val LOCATION_PERMISSION_CODE = 1001
-    private val markerToKey = mutableMapOf<Marker, String>()
+    private lateinit var gmap: GoogleMap
+    private val PERM_CODE = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-        val mapFragment = supportFragmentManager
+        val frag = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
 
-        mapFragment.getMapAsync { googleMap ->
-            map = googleMap
+        frag.getMapAsync { map ->
+            gmap = map
 
-            map.uiSettings.isMyLocationButtonEnabled = true
-            map.uiSettings.isZoomControlsEnabled = true
+            gmap.uiSettings.isMyLocationButtonEnabled = true
+            gmap.uiSettings.isZoomControlsEnabled = true
 
-            checkLocationPermission()
+            checkPermission()
 
-            loadFountainsOnMap()
+            loadFountains()
 
-            map.setOnMapLongClickListener { location ->
-                val fountain = Fountain(location.latitude, location.longitude, 0f)
+            gmap.setOnMapLongClickListener { pos ->
+                val f = Fountain(pos.latitude, pos.longitude, 0f)
 
-                HydroController.addFountainToFirebase(fountain)
+                HydroController.addFountainToFirebase(f)
 
-                val marker = map.addMarker(
+                val m = gmap.addMarker(
                     MarkerOptions()
-                        .position(location)
+                        .position(pos)
                         .title("Water Fountain")
                         .snippet("Tap to rate")
                 )
@@ -54,60 +53,60 @@ class MapActivity : AppCompatActivity() {
                 Toast.makeText(this, "Fountain added!", Toast.LENGTH_SHORT).show()
             }
 
-            map.setOnMarkerClickListener { marker ->
+            gmap.setOnMarkerClickListener { marker ->
                 showRatingDialog(marker)
                 true
             }
 
-            val defaultLocation = LatLng(38.9869, -76.9426)
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 15f))
+            val defLoc = LatLng(38.9869, -76.9426)
+            gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(defLoc, 15f))
         }
     }
 
-    private fun loadFountainsOnMap() {
-        HydroController.loadFountainsFromFirebase { fountains ->
-            for (fountain in fountains) {
-                val position = LatLng(fountain.lat, fountain.lng)
-                val marker = map.addMarker(
+    private fun loadFountains() {
+        HydroController.loadFountainsFromFirebase { fountainList ->
+            for (f in fountainList) {
+                val pos = LatLng(f.lat, f.lng)
+                gmap.addMarker(
                     MarkerOptions()
-                        .position(position)
+                        .position(pos)
                         .title("Water Fountain")
-                        .snippet("Rating: ${fountain.rating} stars")
+                        .snippet("Rating: ${f.rating} stars")
                 )
             }
         }
     }
 
     private fun showRatingDialog(marker: Marker) {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_rate_fountain, null)
-        val ratingBar = dialogView.findViewById<RatingBar>(R.id.ratingBar)
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_rate_fountain, null)
+        val rBar = view.findViewById<RatingBar>(R.id.ratingBar)
 
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
+        val d = AlertDialog.Builder(this)
+            .setView(view)
             .setPositiveButton("Submit") { _, _ ->
-                val rating = ratingBar.rating
-                marker.snippet = "Rating: $rating stars"
+                val r = rBar.rating
+                marker.snippet = "Rating: $r stars"
                 marker.showInfoWindow()
-                Toast.makeText(this, "Thanks for rating!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Thanks!", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("Cancel", null)
             .create()
 
-        dialog.show()
+        d.show()
     }
 
-    private fun checkLocationPermission() {
+    private fun checkPermission() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            map.isMyLocationEnabled = true
+            gmap.isMyLocationEnabled = true
         } else {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_CODE
+                PERM_CODE
             )
         }
     }
@@ -119,9 +118,9 @@ class MapActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == LOCATION_PERMISSION_CODE) {
+        if (requestCode == PERM_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkLocationPermission()
+                checkPermission()
             }
         }
     }

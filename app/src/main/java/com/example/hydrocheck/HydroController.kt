@@ -41,21 +41,21 @@ object HydroController {
     }
 
     fun setMaxWater(context: Context, value: Int) {
-        var safeValue = value
-        if (safeValue < 500) safeValue = 500
-        if (safeValue > 4000) safeValue = 4000
+        var val1 = value
+        if (val1 < 500) val1 = 500
+        if (val1 > 4000) val1 = 4000
 
-        model.maxWater = safeValue
+        model.maxWater = val1
 
-        if (model.currentWater > safeValue) {
-            model.currentWater = safeValue
+        if (model.currentWater > val1) {
+            model.currentWater = val1
         }
 
         saveToPrefs(context)
     }
 
-    fun setDarkMode(context: Context, isDark: Boolean) {
-        model.isDarkMode = isDark
+    fun setDarkMode(context: Context, dark: Boolean) {
+        model.isDarkMode = dark
         saveToPrefs(context)
     }
 
@@ -69,23 +69,23 @@ object HydroController {
         fountainsRef.push().setValue(fountain)
     }
 
-    fun updateFountainRating(fountainKey: String, rating: Float) {
-        fountainsRef.child(fountainKey).child("rating").setValue(rating)
+    fun updateFountainRating(key: String, rating: Float) {
+        fountainsRef.child(key).child("rating").setValue(rating)
     }
 
     fun loadFountainsFromFirebase(callback: (List<Fountain>) -> Unit) {
         fountainsRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val fountainsList = mutableListOf<Fountain>()
-                for (childSnapshot in snapshot.children) {
-                    val fountain = childSnapshot.getValue(Fountain::class.java)
-                    if (fountain != null) {
-                        fountainsList.add(fountain)
+                val list = mutableListOf<Fountain>()
+                for (child in snapshot.children) {
+                    val f = child.getValue(Fountain::class.java)
+                    if (f != null) {
+                        list.add(f)
                     }
                 }
                 model.fountains.clear()
-                model.fountains.addAll(fountainsList)
-                callback(fountainsList)
+                model.fountains.addAll(list)
+                callback(list)
             }
 
             override fun onCancelled(error: DatabaseError) {

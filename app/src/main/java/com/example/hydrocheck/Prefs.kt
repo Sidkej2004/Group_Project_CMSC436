@@ -4,77 +4,77 @@ import android.content.Context
 
 object Prefs {
 
-    private const val PREFS_NAME = "hydro_prefs"
-    private const val DARK_MODE_KEY = "dark_mode"
-    private const val MAX_WATER_KEY = "max_water"
-    private const val CURRENT_WATER_KEY = "current_water"
+    private const val FILE = "hydro_prefs"
+    private const val KEY_DARK = "dark_mode"
+    private const val KEY_MAX = "max_water"
+    private const val KEY_CUR = "current_water"
 
-    private fun getPrefs(ctx: Context) = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private fun sp(ctx: Context) = ctx.getSharedPreferences(FILE, Context.MODE_PRIVATE)
 
     fun isDark(ctx: Context): Boolean {
-        val prefs = getPrefs(ctx)
+        val prefs = sp(ctx)
         return try {
-            prefs.getBoolean(DARK_MODE_KEY, false)
+            prefs.getBoolean(KEY_DARK, false)
         } catch (e: ClassCastException) {
-            val stringValue = prefs.getString(DARK_MODE_KEY, "false") ?: "false"
-            val boolValue = when (stringValue.lowercase()) {
+            val s = prefs.getString(KEY_DARK, "false") ?: "false"
+            val b = when (s.lowercase()) {
                 "true", "dark", "1", "yes" -> true
                 else -> false
             }
-            prefs.edit().remove(DARK_MODE_KEY).putBoolean(DARK_MODE_KEY, boolValue).apply()
-            boolValue
+            prefs.edit().remove(KEY_DARK).putBoolean(KEY_DARK, b).apply()
+            b
         }
     }
 
-    fun setDark(ctx: Context, isDark: Boolean) {
-        getPrefs(ctx).edit().putBoolean(DARK_MODE_KEY, isDark).apply()
+    fun setDark(ctx: Context, dark: Boolean) {
+        sp(ctx).edit().putBoolean(KEY_DARK, dark).apply()
     }
 
     fun getMaxWater(ctx: Context): Int {
-        val prefs = getPrefs(ctx)
+        val prefs = sp(ctx)
         return try {
-            val value = prefs.getInt(MAX_WATER_KEY, 2000)
-            if (value <= 0) 2000 else value
+            val v = prefs.getInt(KEY_MAX, 2000)
+            if (v <= 0) 2000 else v
         } catch (e: ClassCastException) {
-            val stringValue = prefs.getString(MAX_WATER_KEY, "2000") ?: "2000"
-            val intValue = stringValue.toIntOrNull() ?: 2000
-            prefs.edit().remove(MAX_WATER_KEY).putInt(MAX_WATER_KEY, intValue).apply()
-            intValue
+            val s = prefs.getString(KEY_MAX, "2000") ?: "2000"
+            val i = s.toIntOrNull() ?: 2000
+            prefs.edit().remove(KEY_MAX).putInt(KEY_MAX, i).apply()
+            i
         }
     }
 
     fun setMaxWater(ctx: Context, value: Int) {
-        var safeValue = value
-        if (safeValue < 500) safeValue = 500
-        if (safeValue > 4000) safeValue = 4000
+        var v = value
+        if (v < 500) v = 500
+        if (v > 4000) v = 4000
 
-        getPrefs(ctx).edit().putInt(MAX_WATER_KEY, safeValue).apply()
+        sp(ctx).edit().putInt(KEY_MAX, v).apply()
     }
 
     fun getCurrentWater(ctx: Context): Int {
-        val maxWater = getMaxWater(ctx)
-        val prefs = getPrefs(ctx)
-        val value = try {
-            prefs.getInt(CURRENT_WATER_KEY, 0)
+        val max = getMaxWater(ctx)
+        val prefs = sp(ctx)
+        val v = try {
+            prefs.getInt(KEY_CUR, 0)
         } catch (e: ClassCastException) {
-            val stringValue = prefs.getString(CURRENT_WATER_KEY, "0") ?: "0"
-            val intValue = stringValue.toIntOrNull() ?: 0
-            prefs.edit().remove(CURRENT_WATER_KEY).putInt(CURRENT_WATER_KEY, intValue).apply()
-            intValue
+            val s = prefs.getString(KEY_CUR, "0") ?: "0"
+            val i = s.toIntOrNull() ?: 0
+            prefs.edit().remove(KEY_CUR).putInt(KEY_CUR, i).apply()
+            i
         }
 
-        if (value < 0) return 0
-        if (value > maxWater) return maxWater
-        return value
+        if (v < 0) return 0
+        if (v > max) return max
+        return v
     }
 
     fun setCurrentWater(ctx: Context, value: Int) {
-        val maxWater = getMaxWater(ctx)
-        var safeValue = value
+        val max = getMaxWater(ctx)
+        var v = value
 
-        if (safeValue < 0) safeValue = 0
-        if (safeValue > maxWater) safeValue = maxWater
+        if (v < 0) v = 0
+        if (v > max) v = max
 
-        getPrefs(ctx).edit().putInt(CURRENT_WATER_KEY, safeValue).apply()
+        sp(ctx).edit().putInt(KEY_CUR, v).apply()
     }
 }

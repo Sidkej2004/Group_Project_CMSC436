@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         MobileAds.initialize(this)
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
+        val ad = AdRequest.Builder().build()
+        binding.adView.loadAd(ad)
 
         updateUI()
 
@@ -37,24 +37,24 @@ class MainActivity : AppCompatActivity() {
             updateUI()
 
             if (HydroController.getCurrentWater() >= HydroController.getMaxWater()) {
-                Toast.makeText(this, "Daily goal reached! 🎉", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Goal reached! 🎉", Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.openMapBtn.setOnClickListener {
-            val intent = Intent(this, MapActivity::class.java)
-            startActivity(intent)
+            val i = Intent(this, MapActivity::class.java)
+            startActivity(i)
         }
 
         binding.openSettingsBtn.setOnClickListener {
-            val settingsIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(settingsIntent)
+            val i2 = Intent(this, SettingsActivity::class.java)
+            startActivity(i2)
         }
 
         binding.waterProgress.setOnLongClickListener {
             HydroController.resetWater(this)
             updateUI()
-            Toast.makeText(this, "Water intake reset", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Reset!", Toast.LENGTH_SHORT).show()
             true
         }
 
@@ -69,16 +69,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUI() {
-        val maxWater = HydroController.getMaxWater()
-        val currentWater = HydroController.getCurrentWater()
+        val max = HydroController.getMaxWater()
+        val current = HydroController.getCurrentWater()
 
-        binding.waterProgress.max = maxWater
-        binding.waterProgress.progress = currentWater
-        binding.progressLabel.text = "$currentWater / $maxWater ml"
+        binding.waterProgress.max = max
+        binding.waterProgress.progress = current
+        binding.progressLabel.text = "$current / $max ml"
     }
 
     private fun updateFountainCount() {
-        val count = HydroController.getFountains().size
-        binding.fountainCountText.text = "Community fountains: $count"
+        val cnt = HydroController.getFountains().size
+        binding.fountainCountText.text = "Community fountains: $cnt"
     }
 }

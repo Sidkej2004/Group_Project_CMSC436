@@ -25,54 +25,54 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.switchDarkMode.isChecked = HydroController.isDarkMode()
 
-        val maxWater = HydroController.getMaxWater()
-        binding.seekMaxWater.progress = maxWater
-        binding.txtMaxWater.text = "${maxWater} ml"
+        val m = HydroController.getMaxWater()
+        binding.seekMaxWater.progress = m
+        binding.txtMaxWater.text = "${m} ml"
 
-        binding.switchDarkMode.setOnCheckedChangeListener { buttonView, isChecked ->
-            HydroController.setDarkMode(this, isChecked)
-            if (isChecked) {
+        binding.switchDarkMode.setOnCheckedChangeListener { v, checked ->
+            HydroController.setDarkMode(this, checked)
+            if (checked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
 
-            Toast.makeText(this, "Dark mode ${if (isChecked) "enabled" else "disabled"}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Dark mode ${if (checked) "on" else "off"}", Toast.LENGTH_SHORT).show()
         }
 
         binding.seekMaxWater.setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: android.widget.SeekBar?, progress: Int, fromUser: Boolean) {
-                var value = progress
-                if (value < 500) value = 500
-                if (value > 4000) value = 4000
-                binding.txtMaxWater.text = "${value} ml"
+            override fun onProgressChanged(seekBar: android.widget.SeekBar?, prog: Int, fromUser: Boolean) {
+                var v = prog
+                if (v < 500) v = 500
+                if (v > 4000) v = 4000
+                binding.txtMaxWater.text = "${v} ml"
 
                 if (fromUser) {
                     when {
-                        value < 1500 -> binding.txtMaxWater.setTextColor(getColor(android.R.color.holo_red_dark))
-                        value > 3000 -> binding.txtMaxWater.setTextColor(getColor(android.R.color.holo_blue_dark))
+                        v < 1500 -> binding.txtMaxWater.setTextColor(getColor(android.R.color.holo_red_dark))
+                        v > 3000 -> binding.txtMaxWater.setTextColor(getColor(android.R.color.holo_blue_dark))
                         else -> binding.txtMaxWater.setTextColor(getColor(android.R.color.holo_green_dark))
                     }
                 }
             }
 
             override fun onStopTrackingTouch(seekBar: android.widget.SeekBar?) {
-                val progress = seekBar?.progress ?: 2000
-                var value = progress
-                if (value < 500) value = 500
-                if (value > 4000) value = 4000
+                val p = seekBar?.progress ?: 2000
+                var v = p
+                if (v < 500) v = 500
+                if (v > 4000) v = 4000
 
-                HydroController.setMaxWater(this@SettingsActivity, value)
+                HydroController.setMaxWater(this@SettingsActivity, v)
 
-                val savedValue = HydroController.getMaxWater()
-                binding.txtMaxWater.text = "${savedValue} ml"
+                val saved = HydroController.getMaxWater()
+                binding.txtMaxWater.text = "${saved} ml"
                 binding.txtMaxWater.setTextColor(getColor(android.R.color.black))
 
-                Toast.makeText(this@SettingsActivity, "Goal updated to $savedValue ml", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SettingsActivity, "Goal: $saved ml", Toast.LENGTH_SHORT).show()
             }
 
             override fun onStartTrackingTouch(seekBar: android.widget.SeekBar?) {
-                Toast.makeText(this@SettingsActivity, "Adjust your daily goal", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SettingsActivity, "Drag to adjust", Toast.LENGTH_SHORT).show()
             }
         })
 

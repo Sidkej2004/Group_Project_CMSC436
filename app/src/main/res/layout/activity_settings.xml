@@ -4,14 +4,12 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- dark mode toggle -->
     <Switch
         android:id="@+id/switchDarkMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Dark Mode"/>
 
-    <!-- section for water goal -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,21 +17,18 @@
         android:text="Daily Water Goal"
         android:textStyle="bold"/>
 
-    <!-- displays current goal value -->
     <TextView
         android:id="@+id/txtMaxWater"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2000 ml"/>
 
-    <!-- slider to adjust goal -->
     <SeekBar
         android:id="@+id/seekMaxWater"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="4000"/>
 
-    <!-- go back to main screen -->
     <Button
         android:id="@+id/backToHomeBtn"
         android:layout_width="wrap_content"
