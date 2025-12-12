@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "52130833256",
+    "firebase_url": "https://groupproject-98c71-default-rtdb.firebaseio.com",
+    "project_id": "groupproject-98c71",
+    "storage_bucket": "groupproject-98c71.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52130833256:android:100ca8fbe7402ca855acdd",
+        "android_client_info": {
+          "package_name": "com.example.hydrocheck"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm0PhqmuDJ2gesWnp9jGbrbdmcPfUjkVI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
